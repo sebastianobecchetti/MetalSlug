@@ -36,7 +36,8 @@ public class GamePanel extends JPanel implements Runnable {
 	// THREAD
 	Thread gameThread;
 	public CollisionChecker collisionChecker = new CollisionChecker(this);
-	public Player player = new Player(this, kh);
+	public SpriteLoader spriteLoader = new SpriteLoader();
+	public Player player = new Player(this, kh, spriteLoader);
 
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
