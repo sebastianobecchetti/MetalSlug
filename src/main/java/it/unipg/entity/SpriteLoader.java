@@ -8,8 +8,6 @@ public class SpriteLoader {
 	private BufferedImage playerPistolSpriteSheet, legsSpriteSheet, reloadPistolSheet, legsJumpingSpriteSheet,
 			jumpingPlayerPistolSheet;
 	private BufferedImage[] walkingPlayerPistol, walkingLegs, reloadPistol, jumpingLegs, jumpingPlayerPistol;
-	private String PLAYER_PISTOL_PATH = "/res/player_pistol/";
-	private String LEGS_PATH = "/res/legs";
 	private static final int WALK_FRAMES = 12;
 	private static final int RELOAD_FRAMES = 19;
 	private static final int JUMP_FRAMES = 6;

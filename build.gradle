@@ -5,8 +5,8 @@ plugins {
 group = 'it.unipg'
 version = '1.0-SNAPSHOT'
 
-sourceCompatibility = '24'
-targetCompatibility = '24'
+sourceCompatibility = '21'
+targetCompatibility = '21'
 
 repositories {
     mavenCentral()
