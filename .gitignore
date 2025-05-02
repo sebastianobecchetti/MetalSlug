@@ -1,67 +1,7 @@
-
-# === IDEs ===
-# IntelliJ IDEA
-.idea/
-*.iml
-
-# VS Code
-.vscode/
-
-# Eclipse
-.project
-.classpath
-.settings/
-
-# NetBeans
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-
-# === Java ===
 *.class
 *.jar
-*.war
-*.ear
 *.log
-
-# === Maven ===
-target/
-
-# === Gradle ===
-.gradle/
+*.iml
+.idea/
+out/
 build/
-
-# === OS-generated files ===
-.DS_Store
-Thumbs.db
-ehthumbs.db
-Icon?
-Desktop.ini
-
-# === Logs ===
-*.log
-
-# === Environment files ===
-.env
-*.env
-
-# === Compiled object files ===
-*.o
-*.obj
-*.so
-*.dll
-*.exe
-
-# === Backup files ===
-*~
-*.swp
-*.swo
-*.bak
-
-# === Misc ===
-*.tmp
-*.out
-
