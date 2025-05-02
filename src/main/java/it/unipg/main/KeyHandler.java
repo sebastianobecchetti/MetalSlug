@@ -9,6 +9,11 @@ public class KeyHandler implements KeyListener {
 	public boolean isReloading;
 	private long reloadStartTime;
 	private final long RELOAD_DURATION_MS = 2000; // 2 secondi di "hold simulato"
+	private GamePanel gp;
+
+	public KeyHandler(GamePanel gp) {
+		this.gp = gp;
+	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -37,6 +42,9 @@ public class KeyHandler implements KeyListener {
 		}
 		if (code == KeyEvent.VK_CONTROL) {
 			controlPressed = true;
+		}
+		if (code == KeyEvent.VK_P) {
+			gp.togglePause();
 		}
 	}
 

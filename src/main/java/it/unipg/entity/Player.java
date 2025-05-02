@@ -238,7 +238,6 @@ public class Player extends Entity {
 		}
 
 		int x = screenX;
-		System.out.println(bodyState);
 
 		if (facingDirection == FacingDirection.RIGHT) {
 			g2d.drawImage(legs, x, screenY - legsOffsetY, gp.tileSize, gp.tileSize, null);

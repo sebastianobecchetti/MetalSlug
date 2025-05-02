@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
+import java.awt.Font;
 import it.unipg.entity.*;
 import it.unipg.texture.*;
 
@@ -29,10 +29,12 @@ public class GamePanel extends JPanel {
 
 	// FPS
 	private final int FPS = 60;
+	// GAMESTATE
+	private boolean paused = false;
 
 	// COMPONENTS
 	TextureManager tm = new TextureManager(this);
-	KeyHandler kh = new KeyHandler();
+	KeyHandler kh = new KeyHandler(this);
 	public CollisionChecker collisionChecker = new CollisionChecker(this);
 	public SpriteLoader spriteLoader = new SpriteLoader();
 	public Player player = new Player(this, kh, spriteLoader);
@@ -69,9 +71,32 @@ public class GamePanel extends JPanel {
 		g2d.setColor(Color.black);
 		g2d.drawString("FPS: " + FPS, 10, 20); // statico
 
-		tm.draw(g2d);
-		player.draw(g2d);
+		if (!paused) {
+			// TILE
+			tm.draw(g2d);
+			// PLAYER
+			player.draw(g2d);
+		}
+
+		if (paused) { // provvisorio
+			g2d.setColor(Color.RED);
+			g2d.setFont(new Font("SansSerif", Font.BOLD, 48));
+			g2d.drawString("PAUSED", screenWidth / 2 - 100, screenHeight / 2);
+		}
 
 		g2d.dispose();
 	}
+
+	public void pauseGame() {
+		paused = true;
+	}
+
+	public void resumeGame() {
+		paused = false;
+	}
+
+	public void togglePause() {
+		paused = !paused;
+	}
+
 }
