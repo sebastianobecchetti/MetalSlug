@@ -4,7 +4,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
 public class KeyHandler implements KeyListener {
-	public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed;
+	public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, shiftPressed, controlPressed;
 
 	public boolean isReloading;
 	private long reloadStartTime;
@@ -32,6 +32,12 @@ public class KeyHandler implements KeyListener {
 			isReloading = true;
 			reloadStartTime = System.currentTimeMillis();
 		}
+		if (code == KeyEvent.VK_SHIFT) {
+			shiftPressed = true;
+		}
+		if (code == KeyEvent.VK_CONTROL) {
+			controlPressed = true;
+		}
 	}
 
 	@Override
@@ -48,6 +54,12 @@ public class KeyHandler implements KeyListener {
 		if (code == KeyEvent.VK_SPACE)
 			spacePressed = false;
 		// Non disattiviamo subito isReloading per R
+		if (code == KeyEvent.VK_SHIFT) {
+			shiftPressed = false;
+		}
+		if (code == KeyEvent.VK_CONTROL) {
+			controlPressed = false;
+		}
 	}
 
 	public void update() {

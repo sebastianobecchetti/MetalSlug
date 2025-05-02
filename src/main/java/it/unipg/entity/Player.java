@@ -1,4 +1,3 @@
-
 package it.unipg.entity;
 
 import java.awt.Graphics2D;
@@ -10,191 +9,248 @@ import it.unipg.main.KeyHandler;
 
 public class Player extends Entity {
 
-    GamePanel gp;
-    KeyHandler kh;
-    public final int screenX;
-    public final int screenY;
+	GamePanel gp;
+	KeyHandler kh;
+	public final int screenX;
+	public final int screenY;
 
-    private boolean isJumping = false;
-    private int velocityY = 0;
-    private static final int GRAVITY = 1;
-    private static final int JUMP_STRENGTH = -15;
-    private static final int GROUND_LEVEL = 32 * 3 * 7;
-    private static final int SPRITE_UPDATE_SPEED = 5;
+	private boolean isJumping = false;
+	private int velocityY = 0;
+	private static final int GRAVITY = 1;
+	private static final int JUMP_STRENGTH = -15;
+	private static final int GROUND_LEVEL = 32 * 3 * 7;
+	private static final int SPRITE_UPDATE_SPEED = 5;
 
-    private BufferedImage[] walkingPlayerPistol, walkingLegs, reloadPistol, jumpingLegs, jumpingPlayerPistol;
+	private BufferedImage[] walkingPlayerPistol, walkingLegs, reloadPistol, jumpingLegs, jumpingPlayerPistol,
+			crouchPlayerPistol, runningPlayerPistol, runningLegs;
 
-    private Animation walkingBodyAnim;
-    private Animation walkingLegsAnim;
-    private Animation jumpingLegsAnim;
-    private Animation reloadingAnim;
-    private Animation jumpingPlayerPistolAnim;
-    private BodyState bodyState;
+	private Animation walkingBodyAnim;
+	private Animation walkingLegsAnim;
+	private Animation jumpingLegsAnim;
+	private Animation reloadingAnim;
+	private Animation jumpingPlayerPistolAnim;
+	private Animation crouchPlayerPistolAnim;
+	private Animation runningPlayerPistolAnim;
+	private Animation runningLegsAnim;
 
-    public Player(GamePanel gp, KeyHandler kh, SpriteLoader loader) {
-        this.gp = gp;
-        this.kh = kh;
-        screenX = gp.screenWidth / 2;
-        screenY = GROUND_LEVEL;
+	private BodyState bodyState;
 
-        walkingPlayerPistol = loader.getWalkingPlayerPistol();
-        walkingLegs = loader.getWalkingLegs();
-        reloadPistol = loader.getReloadPistol();
-        jumpingLegs = loader.getJumpingLegs();
-        jumpingPlayerPistol = loader.getJumpingPlayerPistol();
+	public Player(GamePanel gp, KeyHandler kh, SpriteLoader loader) {
+		this.gp = gp;
+		this.kh = kh;
+		screenX = gp.screenWidth / 2;
+		screenY = GROUND_LEVEL;
 
-        setDefaultValues();
+		walkingPlayerPistol = loader.getWalkingPlayerPistol();
+		walkingLegs = loader.getWalkingLegs();
+		reloadPistol = loader.getReloadPistol();
+		jumpingLegs = loader.getJumpingLegs();
+		jumpingPlayerPistol = loader.getJumpingPlayerPistol();
+		crouchPlayerPistol = loader.getCrouchPlayerPistol();
+		runningPlayerPistol = loader.getRunningPlayerPistol();
+		runningLegs = loader.getRunningLegs();
 
-        walkingBodyAnim = new Animation(SPRITE_UPDATE_SPEED);
-        walkingLegsAnim = new Animation(SPRITE_UPDATE_SPEED);
-        jumpingLegsAnim = new Animation(SPRITE_UPDATE_SPEED);
-        reloadingAnim = new Animation(SPRITE_UPDATE_SPEED);
-        jumpingPlayerPistolAnim = new Animation(SPRITE_UPDATE_SPEED);
+		setDefaultValues();
 
-        solidArea = new Rectangle(4, 4, 50, 50);
-    }
+		walkingBodyAnim = new Animation(SPRITE_UPDATE_SPEED);
+		walkingLegsAnim = new Animation(SPRITE_UPDATE_SPEED);
+		jumpingLegsAnim = new Animation(SPRITE_UPDATE_SPEED);
+		reloadingAnim = new Animation(SPRITE_UPDATE_SPEED);
+		jumpingPlayerPistolAnim = new Animation(SPRITE_UPDATE_SPEED);
+		crouchPlayerPistolAnim = new Animation(SPRITE_UPDATE_SPEED);
+		runningPlayerPistolAnim = new Animation(SPRITE_UPDATE_SPEED);
+		runningLegsAnim = new Animation(SPRITE_UPDATE_SPEED);
 
-    private void setDefaultValues() {
-        mapX = gp.tileSize * 10;
-        mapY = GROUND_LEVEL;
-        speed = 10;
-        direction = Direction.RIGHT;
-        bodyState = BodyState.WALKING;
-        facingDirection = FacingDirection.RIGHT;
-    }
+		solidArea = new Rectangle(4, 4, 50, 50);
+	}
 
-    public void update() {
-        kh.update();
+	private void setDefaultValues() {
+		mapX = gp.tileSize * 10;
+		mapY = GROUND_LEVEL;
+		speed = 10;
+		direction = Direction.RIGHT;
+		bodyState = BodyState.STANDING;
+		facingDirection = FacingDirection.RIGHT;
+	}
 
-        if (kh.isReloading) {
-            handleReload();
-        } else {
-            bodyState = BodyState.WALKING;
+	private void updateFacingDirection() {
+		if (kh.rightPressed) {
+			facingDirection = FacingDirection.RIGHT;
+		}
+		if (kh.leftPressed) {
+			facingDirection = FacingDirection.LEFT;
+		}
+	}
 
-            if (kh.spacePressed && !isJumping) {
-                handleJumpStart();
-                direction = Direction.JUMPING;
-            }
+	public void update() {
+		kh.update();
 
-            handleWalk();
-            handleDirectionalAim();
-            handleStanding();
-        }
+		updateFacingDirection(); // <-- AGGIUNTA QUI
 
-        if (isJumping)
-            handleJump();
+		if (kh.isReloading) {
+			handleReload();
+		} else {
+			if (kh.spacePressed && !isJumping) {
+				handleJumpStart();
+			}
 
-        collisionOn = false;
-        gp.collisionChecker.checkCollision(this);
-        if (!collisionOn)
-            handleHorizontalMovement();
+			handleCrouch();
+			handleWalk();
+			handleDirectionalAim();
+			handleStanding();
+		}
 
-        walkingBodyAnim.update(walkingPlayerPistol.length);
-        walkingLegsAnim.update(walkingLegs.length);
-    }
+		if (isJumping) {
+			handleJump();
+		}
 
-    private void handleReload() {
-        bodyState = BodyState.RELOADING;
-        reloadingAnim.update(reloadPistol.length);
-        if (reloadingAnim.getFrame() == reloadPistol.length - 1) {
-            kh.isReloading = false;
-            reloadingAnim.reset();
-            bodyState = BodyState.WALKING;
-        }
-    }
+		collisionOn = false;
+		gp.collisionChecker.checkCollision(this);
+		if (!collisionOn && bodyState != BodyState.CROUCHING) {
+			handleHorizontalMovement();
+		}
 
-    private void handleJumpStart() {
-        isJumping = true;
-        velocityY = JUMP_STRENGTH;
-        direction = Direction.JUMPING;
-        bodyState = BodyState.JUMPING;
-    }
+		walkingBodyAnim.update(walkingPlayerPistol.length);
+		walkingLegsAnim.update(walkingLegs.length);
+		runningPlayerPistolAnim.update(runningPlayerPistol.length);
+		runningLegsAnim.update(runningLegs.length);
+	}
 
-    private void handleJump() {
-        mapY += velocityY;
-        velocityY += GRAVITY;
-        if (velocityY > 0)
-            direction = Direction.LANDING;
-        if (mapY >= GROUND_LEVEL) {
-            mapY = GROUND_LEVEL;
-            isJumping = false;
-            velocityY = 0;
-        }
-        jumpingLegsAnim.update(jumpingLegs.length);
-        jumpingPlayerPistolAnim.update(jumpingPlayerPistol.length);
-    }
+	private void handleReload() {
+		bodyState = BodyState.RELOADING;
+		reloadingAnim.update(reloadPistol.length);
+		if (reloadingAnim.getFrame() == reloadPistol.length - 1) {
+			kh.isReloading = false;
+			reloadingAnim.reset();
+			bodyState = BodyState.STANDING;
+		}
+	}
 
-    private void handleWalk() {
-        if (kh.rightPressed) {
-            facingDirection = FacingDirection.RIGHT;
-            if (!isJumping)
-                direction = Direction.RIGHT;
-        }
-        if (kh.leftPressed) {
-            facingDirection = FacingDirection.LEFT;
-            if (!isJumping)
-                direction = Direction.LEFT;
-        }
-    }
+	private void handleJumpStart() {
+		isJumping = true;
+		velocityY = JUMP_STRENGTH;
+		direction = Direction.JUMPING;
+		bodyState = BodyState.JUMPING;
+	}
 
-    private void handleDirectionalAim() {
-        if (kh.downPressed && !isJumping)
-            direction = Direction.DOWN;
-        if (kh.upPressed && !isJumping)
-            direction = Direction.UP;
-    }
+	private void handleJump() {
+		mapY += velocityY;
+		velocityY += GRAVITY;
+		if (velocityY > 0)
+			direction = Direction.LANDING;
+		if (mapY >= GROUND_LEVEL) {
+			mapY = GROUND_LEVEL;
+			isJumping = false;
+			velocityY = 0;
+		}
+		jumpingLegsAnim.update(jumpingLegs.length);
+		jumpingPlayerPistolAnim.update(jumpingPlayerPistol.length);
+	}
 
-    private void handleStanding() {
-        if (!kh.rightPressed && !kh.leftPressed && !kh.isReloading && !kh.spacePressed) {
-            direction = Direction.STANDING;
-            bodyState = BodyState.STANDING;
-        }
-    }
+	private void handleCrouch() {
+		if (kh.shiftPressed && !isJumping) {
+			bodyState = BodyState.CROUCHING;
+		}
+	}
 
-    private void handleHorizontalMovement() {
-        if (kh.rightPressed)
-            mapX += speed;
-        if (kh.leftPressed)
-            mapX -= speed;
-    }
+	private void handleWalk() {
+		if ((kh.rightPressed || kh.leftPressed) && !isJumping) {
+			if (kh.controlPressed) {
+				bodyState = BodyState.RUNNING;
+				speed = 16; // maggiore velocità durante la corsa
+			} else {
+				bodyState = BodyState.WALKING;
+				speed = 10; // normale velocità a piedi
+			}
 
-    public void draw(Graphics2D g2d) {
-        BufferedImage body = null, legs = null;
-        int bodyOffsetY = gp.tileSize * 4 / gp.tileScale;
-        int legsOffsetY = gp.tileSize * 2 / gp.tileScale;
+			if (kh.rightPressed) {
+				facingDirection = FacingDirection.RIGHT;
+				direction = Direction.RIGHT;
+			}
+			if (kh.leftPressed) {
+				facingDirection = FacingDirection.LEFT;
+				direction = Direction.LEFT;
+			}
+		}
+	}
 
-        if (direction == Direction.STANDING) {
-            legs = walkingLegs[5]; // standing frame
-        } else {
-            legs = walkingLegs[walkingLegsAnim.getFrame()];
-        }
+	private void handleDirectionalAim() {
+		if (kh.downPressed && !isJumping) {
+			direction = Direction.DOWN;
+		}
+		if (kh.upPressed && !isJumping) {
+			direction = Direction.UP;
+		}
+	}
 
-        switch (bodyState) {
-            case RELOADING -> body = reloadPistol[reloadingAnim.getFrame()];
-            case WALKING -> body = walkingPlayerPistol[walkingBodyAnim.getFrame()];
-            case STANDING -> body = walkingPlayerPistol[5];
-            case JUMPING -> body = jumpingPlayerPistol[jumpingPlayerPistolAnim.getFrame()];
-            default -> body = walkingPlayerPistol[walkingBodyAnim.getFrame()];
-        }
+	private void handleStanding() {
+		if (!kh.rightPressed && !kh.leftPressed && !kh.isReloading && !kh.spacePressed && !kh.shiftPressed
+				&& !kh.controlPressed) {
+			bodyState = BodyState.STANDING;
+			direction = Direction.STANDING;
+			speed = 10; // reset velocità normale
+		}
+	}
 
-        if (isJumping) {
-            legs = jumpingLegs[jumpingLegsAnim.getFrame()];
-            body = jumpingPlayerPistol[jumpingPlayerPistolAnim.getFrame()];
-        }
+	private void handleHorizontalMovement() {
+		if (direction != Direction.DOWN) {
+			if (kh.rightPressed)
+				mapX += speed;
+			if (kh.leftPressed)
+				mapX -= speed;
+		}
+	}
 
-        int x = screenX;
+	public void draw(Graphics2D g2d) {
+		BufferedImage body = null, legs = null;
+		int bodyOffsetY = gp.tileSize * 4 / gp.tileScale;
+		int legsOffsetY = gp.tileSize * 2 / gp.tileScale;
 
-        if (facingDirection == FacingDirection.RIGHT) {
-            g2d.drawImage(legs, x, screenY - legsOffsetY, gp.tileSize, gp.tileSize, null);
-            g2d.drawImage(body, x, screenY - bodyOffsetY, gp.tileSize, gp.tileSize, null);
-        } else {
-            g2d.drawImage(legs, x + gp.tileSize, screenY - legsOffsetY, -gp.tileSize, gp.tileSize, null);
-            g2d.drawImage(body, x + gp.tileSize, screenY - bodyOffsetY, -gp.tileSize, gp.tileSize, null);
-        }
-    }
+		if (isJumping) {
+			legs = jumpingLegs[jumpingLegsAnim.getFrame()];
+			body = jumpingPlayerPistol[jumpingPlayerPistolAnim.getFrame()];
+		} else {
+			switch (bodyState) {
+				case RELOADING -> {
+					body = reloadPistol[reloadingAnim.getFrame()];
+					legs = walkingLegs[walkingLegsAnim.getFrame()];
+				}
+				case WALKING -> {
+					body = walkingPlayerPistol[walkingBodyAnim.getFrame()];
+					legs = walkingLegs[walkingLegsAnim.getFrame()];
+				}
+				case RUNNING -> {
+					body = runningPlayerPistol[runningPlayerPistolAnim.getFrame()];
+					legs = runningLegs[runningLegsAnim.getFrame()]; // riusa gambe da walk se non hai sprite appositi
+				}
+				case CROUCHING -> {
+					body = crouchPlayerPistol[crouchPlayerPistolAnim.getFrame()];
+				}
+				case STANDING -> {
+					body = walkingPlayerPistol[5];
+					legs = walkingLegs[5];
+				}
+				default -> {
+					body = walkingPlayerPistol[walkingBodyAnim.getFrame()];
+					legs = walkingLegs[walkingLegsAnim.getFrame()];
+				}
+			}
+		}
 
-    private enum BodyState {
-        RELOADING, SHOOTING, JUMPING, WALKING, STANDING
-    }
+		int x = screenX;
+		System.out.println(bodyState);
+
+		if (facingDirection == FacingDirection.RIGHT) {
+			g2d.drawImage(legs, x, screenY - legsOffsetY, gp.tileSize, gp.tileSize, null);
+			g2d.drawImage(body, x, screenY - bodyOffsetY, gp.tileSize, gp.tileSize, null);
+		} else {
+			g2d.drawImage(legs, x + gp.tileSize, screenY - legsOffsetY, -gp.tileSize, gp.tileSize, null);
+			g2d.drawImage(body, x + gp.tileSize, screenY - bodyOffsetY, -gp.tileSize, gp.tileSize, null);
+		}
+	}
+
+	private enum BodyState {
+		RELOADING, SHOOTING, JUMPING, WALKING, STANDING, CROUCHING, RUNNING
+	}
+
 }
-

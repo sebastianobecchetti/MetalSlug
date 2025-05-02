@@ -6,11 +6,15 @@ import java.io.IOException;
 
 public class SpriteLoader {
 	private BufferedImage playerPistolSpriteSheet, legsSpriteSheet, reloadPistolSheet, legsJumpingSpriteSheet,
-			jumpingPlayerPistolSheet;
-	private BufferedImage[] walkingPlayerPistol, walkingLegs, reloadPistol, jumpingLegs, jumpingPlayerPistol;
+			jumpingPlayerPistolSheet, crouchPlayerPistolSheet, runningPlayerPistolSheet, runningLegsSheet;
+	private BufferedImage[] walkingPlayerPistol, walkingLegs, reloadPistol, jumpingLegs, jumpingPlayerPistol,
+			crouchPlayerPistol, runningPlayerPistol, runningLegs;
 	private static final int WALK_FRAMES = 12;
 	private static final int RELOAD_FRAMES = 19;
 	private static final int JUMP_FRAMES = 6;
+	private static final int CROUCH_FRAMES = 7;
+	private static final int RUNNING_FRAMES = 6;
+	private static final int RUNNING_LEGS_FRAME = 5;
 
 	public SpriteLoader() {
 		loadPlayerImages();
@@ -30,9 +34,17 @@ public class SpriteLoader {
 			legsJumpingSpriteSheet = ImageIO.read(getClass().getResource("/res/legs/jumping.png"));
 			jumpingLegs = extractFrames(legsJumpingSpriteSheet, JUMP_FRAMES);
 
-			jumpingPlayerPistolSheet = ImageIO.read(getClass().getResource("/res/player_pistol/jumping.png"));
+			jumpingPlayerPistolSheet = ImageIO.read(getClass().getResourceAsStream("/res/player_pistol/jumping.png"));
 			jumpingPlayerPistol = extractFrames(jumpingPlayerPistolSheet, JUMP_FRAMES);
 
+			crouchPlayerPistolSheet = ImageIO.read(getClass().getResourceAsStream("/res/player_pistol/crouch.png"));
+			crouchPlayerPistol = extractFrames(crouchPlayerPistolSheet, CROUCH_FRAMES);
+
+			runningPlayerPistolSheet = ImageIO.read(getClass().getResourceAsStream("/res/player_pistol/running.png"));
+			runningPlayerPistol = extractFrames(runningPlayerPistolSheet, RUNNING_FRAMES);
+
+			runningLegsSheet = ImageIO.read(getClass().getResourceAsStream("/res/legs/running.png"));
+			runningLegs = extractFrames(runningLegsSheet, RUNNING_LEGS_FRAME);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -66,5 +78,17 @@ public class SpriteLoader {
 
 	public BufferedImage[] getJumpingPlayerPistol() {
 		return jumpingPlayerPistol;
+	}
+
+	public BufferedImage[] getCrouchPlayerPistol() {
+		return crouchPlayerPistol;
+	}
+
+	public BufferedImage[] getRunningPlayerPistol() {
+		return runningPlayerPistol;
+	}
+
+	public BufferedImage[] getRunningLegs() {
+		return runningLegs;
 	}
 }
