@@ -206,25 +206,38 @@ public class Player extends Entity {
 		int bodyOffsetY = gp.tileSize * 4 / gp.tileScale;
 		int legsOffsetY = gp.tileSize * 2 / gp.tileScale;
 
+		float bodyScale = 1.0f; // Scala predefinita per il busto
+		float legsScale = 1.0f; // Scala predefinita per le gambe
+
 		if (isJumping) {
 			legs = jumpingLegs[jumpingLegsAnim.getFrame()];
 			body = jumpingPlayerPistol[jumpingPlayerPistolAnim.getFrame()];
+			bodyScale = 2.0f;
+			legsScale = 2.0f;
+
 		} else {
 			switch (bodyState) {
 				case RELOADING -> {
 					body = reloadPistol[reloadingAnim.getFrame()];
 					legs = walkingLegs[walkingLegsAnim.getFrame()];
+					bodyScale = 1.5f;
 				}
 				case WALKING -> {
 					body = walkingPlayerPistol[walkingBodyAnim.getFrame()];
 					legs = walkingLegs[walkingLegsAnim.getFrame()];
 				}
 				case RUNNING -> {
+					bodyOffsetY = gp.tileSize * 5 / gp.tileScale;
 					body = runningPlayerPistol[runningPlayerPistolAnim.getFrame()];
 					legs = runningLegs[runningLegsAnim.getFrame()]; // riusa gambe da walk se non hai sprite appositi
+					bodyScale = 1.5f;
+					legsScale = 1.5f;
 				}
 				case CROUCHING -> {
-					body = crouchPlayerPistol[crouchPlayerPistolAnim.getFrame()];
+					legsOffsetY = 144;
+					legs = crouchPlayerPistol[crouchPlayerPistolAnim.getFrame()];
+					bodyScale = 1.5f;
+					legsScale = 1.5f;
 				}
 				case STANDING -> {
 					body = walkingPlayerPistol[5];
@@ -235,16 +248,19 @@ public class Player extends Entity {
 					legs = walkingLegs[walkingLegsAnim.getFrame()];
 				}
 			}
+
 		}
 
 		int x = screenX;
+		int bodyScaledTileSize = (int) (gp.tileSize * bodyScale);
+		int legsScaledTileSize = (int) (gp.tileSize * legsScale);
 
 		if (facingDirection == FacingDirection.RIGHT) {
-			g2d.drawImage(legs, x, screenY - legsOffsetY, gp.tileSize, gp.tileSize, null);
-			g2d.drawImage(body, x, screenY - bodyOffsetY, gp.tileSize, gp.tileSize, null);
+			g2d.drawImage(legs, x, screenY - legsOffsetY, legsScaledTileSize, legsScaledTileSize, null);
+			g2d.drawImage(body, x, screenY - bodyOffsetY, bodyScaledTileSize, bodyScaledTileSize, null);
 		} else {
-			g2d.drawImage(legs, x + gp.tileSize, screenY - legsOffsetY, -gp.tileSize, gp.tileSize, null);
-			g2d.drawImage(body, x + gp.tileSize, screenY - bodyOffsetY, -gp.tileSize, gp.tileSize, null);
+			g2d.drawImage(legs, x + gp.tileSize, screenY - legsOffsetY, -legsScaledTileSize, legsScaledTileSize, null);
+			g2d.drawImage(body, x + gp.tileSize, screenY - bodyOffsetY, -bodyScaledTileSize, bodyScaledTileSize, null);
 		}
 	}
 
