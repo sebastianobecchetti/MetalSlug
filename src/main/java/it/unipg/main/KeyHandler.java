@@ -1,10 +1,12 @@
 package it.unipg.main;
 
 import java.awt.event.KeyListener;
+import java.security.Key;
 import java.awt.event.KeyEvent;
 
 public class KeyHandler implements KeyListener {
-	public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, shiftPressed, controlPressed;
+	public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, shiftPressed, controlPressed,
+			firePressed;
 
 	public boolean isReloading;
 	private long reloadStartTime;
@@ -46,6 +48,9 @@ public class KeyHandler implements KeyListener {
 		if (code == KeyEvent.VK_P) {
 			gp.togglePause();
 		}
+		if (code == KeyEvent.VK_J) {
+			firePressed = true;
+		}
 	}
 
 	@Override
@@ -68,6 +73,10 @@ public class KeyHandler implements KeyListener {
 		if (code == KeyEvent.VK_CONTROL) {
 			controlPressed = false;
 		}
+		if (code == KeyEvent.VK_J) {
+			firePressed = false;
+		}
+
 	}
 
 	public void update() {

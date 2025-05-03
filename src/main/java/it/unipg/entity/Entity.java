@@ -12,7 +12,6 @@ public class Entity {
 																// PRIMA POSSIBILE PLS CHECCO
 
 	public Direction direction;
-	public FacingDirection facingDirection;
 
 	public int spriteCounter = 0;
 	public int spriteNum = 1;
@@ -20,10 +19,7 @@ public class Entity {
 	public boolean collisionOn = false;
 
 	public enum Direction {
-		RIGHT, LEFT, UP, DOWN, JUMPING, LANDING, STANDING
+		RIGHT, LEFT, UP, DOWN
 	}
 
-	public enum FacingDirection {
-		RIGHT, LEFT
-	}
 }
