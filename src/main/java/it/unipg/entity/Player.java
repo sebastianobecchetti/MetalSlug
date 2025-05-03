@@ -231,7 +231,6 @@ public class Player extends Entity {
 					body = runningPlayerPistol[runningPlayerPistolAnim.getFrame()];
 					legs = runningLegs[runningLegsAnim.getFrame()]; // riusa gambe da walk se non hai sprite appositi
 					bodyScale = 1.5f;
-					legsScale = 1.5f;
 				}
 				case CROUCHING -> {
 					legsOffsetY = 144;

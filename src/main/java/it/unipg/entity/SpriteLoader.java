@@ -1,8 +1,9 @@
 package it.unipg.entity;
 
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class SpriteLoader {
 	private BufferedImage playerPistolSpriteSheet, legsSpriteSheet, reloadPistolSheet, legsJumpingSpriteSheet,
@@ -14,7 +15,7 @@ public class SpriteLoader {
 	private static final int JUMP_FRAMES = 6;
 	private static final int CROUCH_FRAMES = 7;
 	private static final int RUNNING_FRAMES = 6;
-	private static final int RUNNING_LEGS_FRAME = 5;
+	private static final int RUNNING_LEGS_FRAME = 12;
 
 	public SpriteLoader() {
 		loadPlayerImages();
