@@ -32,6 +32,7 @@ public class TextureManager {
 
 			textures[1] = new Texture();
 			textures[1].image = ImageIO.read(getClass().getResourceAsStream("/res/tiles/wall.png"));
+			textures[1].collision = true;
 
 			textures[2] = new Texture();
 			textures[2].image = ImageIO.read(getClass().getResourceAsStream("/res/tiles/trasparente.png"));

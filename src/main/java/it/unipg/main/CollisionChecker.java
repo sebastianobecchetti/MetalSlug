@@ -19,8 +19,8 @@ public class CollisionChecker {
 		// Colonne e righe dell'entità nella mappa
 		int entityLeftCol = entityLeftMapX / gp.tileSize;
 		int entityRightCol = entityRightMapX / gp.tileSize;
-		int entityTopRow = entityTopMapY / gp.tileSize;
-		int entityBottomRow = entityBottomMapY / gp.tileSize;
+		int entityTopRow = entityTopMapY / gp.tileSize - 1; // da risolvere!
+		int entityBottomRow = entityBottomMapY / gp.tileSize - 1;
 
 		int textureNum1, textureNum2;
 
@@ -32,6 +32,7 @@ public class CollisionChecker {
 				entityRightCol = (entityRightMapX + entity.speed) / gp.tileSize;
 				textureNum1 = gp.tm.mapTextureNum[entityTopRow][entityRightCol];
 				textureNum2 = gp.tm.mapTextureNum[entityBottomRow][entityRightCol];
+				System.out.println(entityRightCol + "\n" + entityTopRow + "\n" + entityBottomRow + "\n" + entityLeftCol);
 				if (gp.tm.textures[textureNum1].collision || gp.tm.textures[textureNum2].collision) {
 					entity.collisionOn = true;
 					System.out.println("COLLISIONE");

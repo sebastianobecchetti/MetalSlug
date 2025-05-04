@@ -8,16 +8,17 @@ import javax.imageio.ImageIO;
 public class SpriteLoader {
 	private BufferedImage playerPistolSpriteSheet, legsSpriteSheet, reloadPistolSheet, legsJumpingSpriteSheet,
 			jumpingPlayerPistolSheet, crouchPlayerPistolSheet, runningPlayerPistolSheet, runningLegsSheet,
-			shootingRightPistolSheet;
+			shootingRightPistolSheet, shootingUpPistolSheet, shootingDownPistolSheet;
 	private BufferedImage[] walkingPlayerPistol, walkingLegs, reloadPistol, jumpingLegs, jumpingPlayerPistol,
-			crouchPlayerPistol, runningPlayerPistol, runningLegs, shootingRightPistol;
+			crouchPlayerPistol, runningPlayerPistol, runningLegs, shootingRightPistol, shootingUpPistol, shootingDownPistol;
 	private static final int WALK_FRAMES = 12;
 	private static final int RELOAD_FRAMES = 19;
 	private static final int JUMP_FRAMES = 6;
 	private static final int CROUCH_FRAMES = 7;
 	private static final int RUNNING_FRAMES = 6;
 	private static final int RUNNING_LEGS_FRAME = 12;
-	private static final int SHOOTING_FRAMES = 10;
+	private static final int SHOOTING_RIGHT_FRAMES = 10;
+	private static final int SHOOTING_UP_FRAMES = 10;
 
 	public SpriteLoader() {
 		loadPlayerImages();
@@ -50,7 +51,11 @@ public class SpriteLoader {
 			runningLegs = extractFrames(runningLegsSheet, RUNNING_LEGS_FRAME);
 
 			shootingRightPistolSheet = ImageIO.read(getClass().getResourceAsStream("/res/player_pistol/shooting_right.png"));
-			shootingRightPistol = extractFrames(shootingRightPistolSheet, SHOOTING_FRAMES);
+			shootingRightPistol = extractFrames(shootingRightPistolSheet, SHOOTING_RIGHT_FRAMES);
+
+			shootingUpPistolSheet = ImageIO.read(getClass().getResourceAsStream("/res/player_pistol/shooting_up.png"));
+			shootingUpPistol = extractFrames(shootingUpPistolSheet, SHOOTING_UP_FRAMES);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -101,4 +106,9 @@ public class SpriteLoader {
 	public BufferedImage[] getShootingRightPistol() {
 		return shootingRightPistol;
 	}
+
+	public BufferedImage[] getShootingUpPistol() {
+		return shootingUpPistol;
+	}
+
 }

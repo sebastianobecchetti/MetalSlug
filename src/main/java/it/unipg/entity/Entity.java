@@ -1,5 +1,7 @@
 package it.unipg.entity;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
@@ -17,6 +19,8 @@ public class Entity {
 	public int spriteNum = 1;
 	public Rectangle solidArea;
 	public boolean collisionOn = false;
+
+
 
 	public enum Direction {
 		RIGHT, LEFT, UP, DOWN
