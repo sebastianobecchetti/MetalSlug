@@ -63,7 +63,7 @@ public class Player extends Entity {
 		shootingRightPistolAnim = new Animation(SPRITE_UPDATE_SPEED);
 		shootingUpPistolAnim = new Animation(SPRITE_UPDATE_SPEED);
 
-		solidArea = new Rectangle(10, 20, 20, 10);
+		solidArea = new Rectangle(0, 0, 32, 32);
 	}
 
 	private void setDefaultValues() {
@@ -90,7 +90,7 @@ public class Player extends Entity {
 
 		if (ammo == 0 && !kh.isReloading) {
 			kh.isReloading = true;
-			System.out.println("Ricaricando...");
+			// System.out.println("Ricaricando...");
 		}
 
 		if (kh.isReloading) {
@@ -129,7 +129,7 @@ public class Player extends Entity {
 			kh.isReloading = false;
 			reloadingAnim.reset();
 			bodyState = BodyState.STANDING;
-			System.out.println("Ricarica completata.");
+			// System.out.println("Ricarica completata.");
 		}
 	}
 
@@ -223,7 +223,7 @@ public class Player extends Entity {
 				shootingRightPistolAnim.update(shootingRightPistol.length);
 				if (shootingRightPistolAnim.getFrame() == shootingRightPistol.length - 1) {
 					ammo--;
-					System.out.println("AMMO NUMBER: " + ammo);
+					// System.out.println("AMMO NUMBER: " + ammo);
 					isShooting = false;
 					kh.firePressed = false;
 				}
@@ -231,7 +231,7 @@ public class Player extends Entity {
 				shootingUpPistolAnim.update(shootingUpPistol.length);
 				if (shootingUpPistolAnim.getFrame() == shootingUpPistol.length - 1) {
 					ammo--;
-					System.out.println("AMMO NUMBER: " + ammo);
+					// System.out.println("AMMO NUMBER: " + ammo);
 					isShooting = false;
 					kh.firePressed = false;
 				}
