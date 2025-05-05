@@ -17,7 +17,7 @@ public class CollisionChecker {
 
 		int entityRightMapX = entity.mapX + entity.solidArea.x + entity.solidArea.width;
 		int entityTopMapY = entity.mapY + entity.solidArea.y;
-		int entityBottomMapY = entity.mapY + entity.solidArea.y + entity.solidArea.height;
+		int entityBottomMapY = entity.mapY + entity.solidArea.y + entity.solidArea.height; 
 
 		// Colonne e righe dell'entità nella mappa
 		int entityLeftCol = entityLeftMapX / gp.tileSize;
@@ -35,12 +35,8 @@ public class CollisionChecker {
 			case RIGHT: // le collisioni vengono erratamente messe a true anche se il giocatore si trova
 									// sopra
 				entityRightCol = (entityRightMapX + entity.speed) / gp.tileSize;
-				System.out
-						.println("right map x: " + entityRightMapX + "right col: " + entityRightCol + "speed " + entity.speed);
 				textureNum1 = gp.tm.mapTextureNum[entityTopRow][entityRightCol];
 				textureNum2 = gp.tm.mapTextureNum[entityBottomRow][entityRightCol];
-				// System.out.println(entityRightCol + "\n" + entityTopRow + "\n" +
-				// entityBottomRow + "\n" + entityLeftCol);
 				if (gp.tm.textures[textureNum1].collision || gp.tm.textures[textureNum2].collision) {
 					entity.collisionOn = true;
 					System.out.println("COLLISIONE");
