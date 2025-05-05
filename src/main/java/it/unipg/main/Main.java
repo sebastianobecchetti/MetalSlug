@@ -7,7 +7,7 @@ public class Main {
 		JFrame window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
-		window.setTitle("2D Game");
+		window.setTitle("Metal Slug");
 		GamePanel gp = new GamePanel();
 		window.add(gp);
 		window.pack();

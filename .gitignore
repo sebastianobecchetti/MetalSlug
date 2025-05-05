@@ -32,7 +32,6 @@ target/
 
 # === Gradle ===
 .gradle/
-build/
 
 # === OS-generated files ===
 .DS_Store
@@ -42,7 +41,6 @@ Icon?
 Desktop.ini
 
 # === Logs ===
-*.log
 
 # === Environment files ===
 .env
@@ -64,4 +62,5 @@ Desktop.ini
 # === Misc ===
 *.tmp
 *.out
+
 
